@@ -1,9 +1,12 @@
 package com.example.hw3.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -28,6 +31,7 @@ import java.util.List;
 
 public class CatRecyclerFragment extends Fragment {
     private RecyclerView recyclerView;
+    private ArrayList<Cat> catsFromDatabase;
 
     public CatRecyclerFragment() {
         // Required empty public constructor
@@ -44,7 +48,7 @@ public class CatRecyclerFragment extends Fragment {
 
         final CatAdapter catAdapter = new CatAdapter();
 
-        // Start Volley stuff
+        // Start Volley
         // 1. Create request queue.
         // 2. Create response listener and error listener
         // 3. Create Request object using url, response listener, error listener.
@@ -52,27 +56,11 @@ public class CatRecyclerFragment extends Fragment {
 
         final RequestQueue requestQueue =  Volley.newRequestQueue(getActivity());
 
-        // To get the url, you need to read the documentation of the API.
-        // Figure out what data you want, and they should tell you how to get the correct URL.
-        // Also in this case, I've put my API key in an XML file (secrets.xml).
-        // This helps me easily reuse the API key by calling getString.
-        // It also makes it easy for me to hide the API key if I want to share my code
-        // (I can just ignore the secrets.xml file instead of having to go into all the files and delete it.)
-        // You will need to go into the file and put in your own API key first.
         String url = "https://api.thecatapi.com/v1/breeds";
 
-        // Response.Listener<String>. We define what to do after a response is received.
-        // Response.Listener means that it is referring to the inner class Listener, which has been
-        // defined inside another class Response.
-        // The <String> part corresponds to the type of the response.
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                // This method, onResponse, is executed after a response is received for your request.
-                // Logically, this means it is the only place where you are guarantee that a response
-                // has been received.
-                // So, you must write all the code that depends on having a response here.
-                // For example, converting the response to objects using Gson.
 
                 Gson gson = new Gson();
                 Cat[] objectsArray = gson.fromJson(response, Cat[].class);
@@ -83,20 +71,18 @@ public class CatRecyclerFragment extends Fragment {
 
                 //for (Cat c : objectsList) { System.out.println(c); }
 
-                //List<Cat> theCats = Cat.getCats();
 
-                // I save my results to the database so I can retrieve it later in my other activities.
+                // Save my results to the database
                 AppDatabase db = AppDatabase.getInstance(getContext());
-                // Keep in mind that this insertAll query will be blocking the main thread, so the
-                // program will be stuck at this line of code until the query finishes.
+
                 db.catDao().insertAll(objectsList);
 
-                // After inserting, I want to get what's in the database now.
+                // Get what's in the database now
                 List<Cat> listCatsFromDatabase = db.catDao().getAll();
 
-                for (Cat c : listCatsFromDatabase) { System.out.println(c); }
+                //for (Cat c : listCatsFromDatabase) { System.out.println(c); }
 
-                // Convert list to arraylist
+                // Convert list to array list
                 ArrayList<Cat> catsFromDatabase = new ArrayList<Cat>(listCatsFromDatabase);
 
                 //System.out.println(Arrays.toString(catsFromDatabase.toArray()));
@@ -104,10 +90,11 @@ public class CatRecyclerFragment extends Fragment {
                 catAdapter.setData(catsFromDatabase);
                 recyclerView.setAdapter(catAdapter);
 
-                // It is a good idea to include this line after we are done with the requestQueue.
-                // It just closes the queue.
+                // Close queue
                 requestQueue.stop();
             }
+
+
         };
 
         Response.ErrorListener errorListener = new Response.ErrorListener() {
@@ -121,15 +108,45 @@ public class CatRecyclerFragment extends Fragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, responseListener,
                 errorListener);
 
-        // This line simply adds the request to the queue. It's not necessarily going to be executed
-        // immediately (there could possibly be other requests in the queue).
-        // Also, because requests to the internet take time, we cannot guarantee that the response
-        // will be received right away.
-        // We are NOT GUARANTEED to have a response after this line.
-        // That is the purpose of the onResponse method in the response listener.
         requestQueue.add(stringRequest);
 
+        View v = inflater.inflate(R.layout.fragment_cat_recycler,container,false);
+        EditText editText = v.findViewById(R.id.edittext);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filter(s.toString());
+
+            }
+        });
+
         return view;
+
+
     }
+
+    public void filter(String search) {
+            ArrayList<Cat> filteredList = new ArrayList<>();
+            for(Cat c : catsFromDatabase){
+                if (c.getName().toLowerCase().contains(search.toLowerCase())) {
+                    filteredList.add(c);
+                }
+                CatAdapter catAdapter = new CatAdapter();
+                catAdapter.filterList(catsFromDatabase);
+            }
+
+
+    }
+
 
 }

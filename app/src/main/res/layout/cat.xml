@@ -15,7 +15,7 @@
 
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/fave_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-condensed-medium"

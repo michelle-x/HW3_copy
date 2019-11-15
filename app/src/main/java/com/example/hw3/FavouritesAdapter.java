@@ -10,63 +10,58 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-//import com.example.hw3.activity.CatDetailActivity;
 import com.example.hw3.activity.CatDetailActivity;
 import com.example.hw3.model.Cat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CatAdapter extends RecyclerView.Adapter<CatAdapter.CatViewHolder>  {
-    private List<Cat> catsToAdapt;
+public class FavouritesAdapter extends RecyclerView.Adapter<FavouritesAdapter.FavouritesViewHolder>  {
 
+    private List<Cat> faveCats;
 
-    public CatAdapter(List<Cat> catsToAdapt) {
-        this.catsToAdapt = catsToAdapt;
-    }
-
-
-
-    public CatAdapter() {
+    public FavouritesAdapter(List<Cat> faveCats) {
+        this.faveCats = faveCats;
 
     }
 
+    public FavouritesAdapter() {
 
+    }
 
-
-    public void setData(List<Cat> catsToAdapt) {
-        this.catsToAdapt = catsToAdapt;
+    public void setData(List<Cat> faveCats) {
+        this.faveCats = faveCats;
     }
 
     @NonNull
     @Override
-    public CatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FavouritesAdapter.FavouritesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view =
                 LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.cat, parent, false);
+                        .inflate(R.layout.favourites, parent, false);
 
-        CatViewHolder catViewHolder = new CatViewHolder(view);
-        return catViewHolder;
+        FavouritesAdapter.FavouritesViewHolder favouritesViewHolder = new FavouritesAdapter.FavouritesViewHolder(view);
+        return favouritesViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CatViewHolder holder, int position) {
-        final Cat catAtPosition = catsToAdapt.get(position);
+    public void onBindViewHolder(@NonNull FavouritesAdapter.FavouritesViewHolder holder, int position) {
+        final Cat faveCatAtPosition = faveCats.get(position);
 
-        holder.bind(catAtPosition);
+        holder.bind(faveCatAtPosition);
     }
 
     @Override
     public int getItemCount() {
-        return catsToAdapt.size();
+        return faveCats.size();
     }
 
-    public class CatViewHolder extends RecyclerView.ViewHolder {
+    public class FavouritesViewHolder extends RecyclerView.ViewHolder {
         public View view;
         public TextView titleTextView;
 
-        public CatViewHolder(View v) {
-            super(v);  // runs the constructor for the ViewHolder superclass
+        public FavouritesViewHolder(View v) {
+            super(v);
             view = v;
             titleTextView = v.findViewById(R.id.fave_title);
 
@@ -74,6 +69,7 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.CatViewHolder>  
 
         public void bind(final Cat cat) {
             titleTextView.setText(cat.getName());
+
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -86,14 +82,9 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.CatViewHolder>  
                 }
             });
 
-           // String imageUrl = cat.getCatImage();
-            //Glide.with(view.getContext()).load(imageUrl).into(catImageView);
         }
 
-    }
+    };
 
-    public void filterList(ArrayList<Cat> filteredList) {
-        catsToAdapt = filteredList;
-        notifyDataSetChanged();
-    }
+
 }

@@ -1,48 +1,86 @@
-/*package com.example.hw3.activity;
+package com.example.hw3.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.bumptech.glide.Glide;
+import com.example.hw3.FavouritesAdapter;
+import com.example.hw3.R;
+import com.example.hw3.database.AppDatabase;
+import com.example.hw3.model.Cat;
+
+import java.util.List;
 
 public class CatDetailActivity  extends AppCompatActivity {
-    ConstraintLayout bookConstraintLayout;
-    TextView titleTextView;
-    TextView authorTextView;
-    TextView descriptionTextView;
-    TextView rankTextView;
-    ImageView coverImageView;
+
+    ConstraintLayout catConstraintLayout;
+    TextView nameTextView;
+    TextView descTextView;
+    TextView weightTextView;
+    TextView tempTextView;
+    TextView originTextView;
+    TextView lifeTextView;
+    TextView wikiTextView;
+    TextView dogTextView;
+    ImageView catImageView;
+
+    private List<Cat> faveCats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_detail);
+        setContentView(R.layout.activity_cat_detail);
 
-        bookConstraintLayout = findViewById(R.id.book);
-        titleTextView = bookConstraintLayout.findViewById(R.id.tv_title);
-        authorTextView = bookConstraintLayout.findViewById(R.id.tv_author);
-        rankTextView = bookConstraintLayout.findViewById(R.id.tv_rank);
-        coverImageView = bookConstraintLayout.findViewById(R.id.iv_cover);
-        descriptionTextView = findViewById(R.id.tv_description);
+        catConstraintLayout = findViewById(R.id.cat);
+        nameTextView = catConstraintLayout.findViewById(R.id.detail_name);
+        descTextView = catConstraintLayout.findViewById(R.id.detail_desc);
+        weightTextView = catConstraintLayout.findViewById(R.id.detail_weight);
+        tempTextView = catConstraintLayout.findViewById(R.id.detail_temp);
+        originTextView = catConstraintLayout.findViewById(R.id.detail_origin);
+        lifeTextView = catConstraintLayout.findViewById(R.id.detail_life);
+        wikiTextView = catConstraintLayout.findViewById(R.id.detail_wiki);
+        dogTextView = catConstraintLayout.findViewById(R.id.detail_dog);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
 
-        long isbn = intent.getLongExtra("isbn", 0);
-        AppDatabase db = AppDatabase.getInstance(this);
-        Book book = db.bookDao().findBookByIsbn(isbn);
+        final String id = intent.getStringExtra("id");
+        final AppDatabase db = AppDatabase.getInstance(this);
+        final Cat cat = db.catDao().findCatById(id);
 
-        titleTextView.setText(book.getTitle());
-        authorTextView.setText(book.getAuthor());
-        rankTextView.setText("#" + String.valueOf(book.getRank()));
-        descriptionTextView.setText(book.getDescription());
+        nameTextView.setText(cat.getName());
+        descTextView.setText(cat.getDescription());
+        weightTextView.setText(cat.getWeight_imperial());
+        tempTextView.setText(cat.getTemperament());
+        originTextView.setText(cat.getOrigin());
+        lifeTextView.setText(cat.getLife_span());
+        wikiTextView.setText(cat.getWikipedia_url());
+        dogTextView.setText(cat.getDog_friendly());
 
-        String imageUrl = book.getBookImage();
-        Glide.with(this).load(imageUrl).into(coverImageView);
+        //String imageUrl = cat.getCatImage();
+        //Glide.with(this).load(imageUrl).into(catImageView);
+
+
+        Button clickFave = (Button)findViewById(R.id.favebtn);
+        clickFave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //How to add this cat to array of fave cats
+                faveCats.add(cat);
+
+                FavouritesAdapter favouritesAdapter = new FavouritesAdapter();
+                favouritesAdapter.setData(faveCats);
+
+            }
+        });
+
     }
+
+
+
 }
-*/

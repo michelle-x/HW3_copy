@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "64a8cab896d9ed62b52a006a9aa8d2d4",
+    "identityHash": "6ecea687e05171fcd8e96092ddf1467a",
     "entities": [
       {
         "tableName": "Cat",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT, `description` TEXT, `temperament` TEXT, `weight_imperial` TEXT, `life_span` TEXT, `origin` TEXT, `wikipedia_url` TEXT, `dog_friendly` INTEGER NOT NULL, `catImage` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT, `description` TEXT, `temperament` TEXT, `weight_imperial` TEXT, `life_span` TEXT, `origin` TEXT, `wikipedia_url` TEXT, `dog_friendly` TEXT, `catImage` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -59,8 +59,8 @@
           {
             "fieldPath": "dog_friendly",
             "columnName": "dog_friendly",
-            "affinity": "INTEGER",
-            "notNull": true
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "catImage",
@@ -82,7 +82,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '64a8cab896d9ed62b52a006a9aa8d2d4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6ecea687e05171fcd8e96092ddf1467a')"
     ]
   }
 }

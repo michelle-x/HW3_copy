@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 public class Cat {
-    // ISBN can be our ID for books (we use isbn13 instead of isbn10)
+
     @PrimaryKey
     @NonNull
     private String id;
@@ -20,13 +20,16 @@ public class Cat {
     private String name;
     private String description;
     private String temperament;
+
+
+
     private String weight_imperial;
     private String life_span;
     private String origin;
     private String wikipedia_url;
-    private int dog_friendly;
+    private String dog_friendly;
 
-    public Cat(String id, String name, String description, String temperament, String weight_imperial, String life_span, String origin, String wikipedia_url, int dog_friendly, String catImage) {
+    public Cat(String id, String name, String description, String temperament, String weight_imperial, String life_span, String origin, String wikipedia_url, String dog_friendly, String catImage) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -49,11 +52,7 @@ public class Cat {
 
     @SerializedName("cat_image")
     private String catImage;
-    /*
-    @Ignore
-    @SerializedName("buy_links")
-    private List<BuyLink> buyLinks;
-    */
+
 
     public String getId() {
         return id;
@@ -91,7 +90,7 @@ public class Cat {
         return weight_imperial;
     }
 
-    public void setWeight_imperial(String weight_imperial) {
+    public void setWeight(String weight_imperial) {
         this.weight_imperial = weight_imperial;
     }
 
@@ -119,11 +118,10 @@ public class Cat {
         this.wikipedia_url = wikipedia_url;
     }
 
-    public int getDog_friendly() {
-        return dog_friendly;
+    public String getDog_friendly() { return dog_friendly;
     }
 
-    public void setDog_friendly(int dog_friendly) {
+    public void setDog_friendly(String dog_friendly) {
         this.dog_friendly = dog_friendly;
     }
 
